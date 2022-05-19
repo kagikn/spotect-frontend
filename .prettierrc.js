@@ -1,0 +1,14 @@
+'use strict';
+
+module.exports = {
+  bracketSpacing: false,
+  singleQuote: true,
+  jsxBracketSameLine: true,
+  trailingComma: 'es5',
+  printWidth: 80,
+};
+tabWidth: 2;
+singleQuote: true;
+trailingComma: 'none';
+semi: false;
+useTabs: false;
