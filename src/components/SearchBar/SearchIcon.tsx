@@ -1,5 +1,4 @@
-import React, {memo, FC, ReactNode} from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import SvgIcon, {svgPropParamsNoChildren} from '../SvgIcon/SvgIcon';
 
 const SearchIcon = (props: svgPropParamsNoChildren) => {

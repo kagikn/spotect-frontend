@@ -1,8 +1,5 @@
-import React, {FC, ReactNode} from 'react';
+import React from 'react';
 import {Link} from '@tanstack/react-location';
-import ReactDOM from 'react-dom';
-import styled from 'styled-components';
-import SvgIcon from '../SvgIcon/SvgIcon';
 
 type SearchResultListItemProps = {
   img: string;

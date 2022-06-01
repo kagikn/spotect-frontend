@@ -1,5 +1,4 @@
-import React, {useState, useEffect, FormEvent} from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import Progress, {ProgressPropType} from './Progress';
 
 type AudioFeaturePercentagePropType = {

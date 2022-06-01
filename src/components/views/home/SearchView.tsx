@@ -1,22 +1,9 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import styled from 'styled-components';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-  useInfiniteQuery,
-} from 'react-query';
+import React, {useCallback} from 'react';
 import {useMatch, useNavigate} from '@tanstack/react-location';
 import SongSearchResultList from '../../SearchResultList/SongSearchResultList';
 import SearchBarForm from '../../SearchBar/SearchBarForForm';
 import SvgIcon from '../../SvgIcon/SvgIcon';
-import SearchResultListItem from '../../SearchResultList/SongSearchResultListItem';
-import useAddPreconnectOnce from '../../useAddPreconnectOnce';
-import SongSearchResultListDummyItem from '../../SearchResultList/SongSearchResultListDummyItem';
 import useSearchInput from '../../SearchBar/useSearchInput';
-import useDebounce from '../../SearchBar/useDebounce';
 
 const SearchView = (): JSX.Element => {
   const {
@@ -42,8 +29,6 @@ const SearchView = (): JSX.Element => {
   const queryValue = value.trimEnd();
 
   const ListMemorized = <SongSearchResultList query={queryValue} />;
-
-  // const SongSearchResultListMemorized = useMemo(() => , [value]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, {Suspense, lazy} from 'react';
+import React from 'react';
 import {Router, ReactLocation, Outlet} from '@tanstack/react-location';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {routes} from './Router';

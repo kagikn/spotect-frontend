@@ -1,25 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
 import {css} from '@emotion/css';
-
-const BarBackground = styled.div<{
-  width?: string | number;
-  height?: string | number;
-  color?: string;
-}>`
-  width: ${(props) => props.width ?? '100%'};
-  height: ${(props) => props.height ?? '20px'};
-  background-color: ${(props) => props.color ?? 'transparent'};
-`;
-
-const BarFront = styled.div<{
-  percentage: number;
-  color: string;
-}>`
-  width: ${(props) => `${props.percentage}%`};
-  height: 100%;
-  background-color: ${(props) => `${props.color}`};
-`;
 
 type ProgressPropType = {
   value: number;

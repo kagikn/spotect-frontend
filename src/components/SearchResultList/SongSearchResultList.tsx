@@ -1,33 +1,11 @@
-import {useNavigate} from '@tanstack/react-location';
-import React, {
-  FC,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
-import ReactDOM from 'react-dom';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-  useInfiniteQuery,
-} from 'react-query';
-import {FixedSizeList} from 'react-window';
-import InfiniteScroll from 'react-infinite-scroller';
-import {GroupedVirtuoso, Virtuoso} from 'react-virtuoso';
+import React, {useEffect, useMemo, useRef} from 'react';
+import {useQueryClient, useInfiniteQuery} from 'react-query';
+import {Virtuoso} from 'react-virtuoso';
 import addMemorizedPreconnectOnce from '../AddPreconnectOnce';
-import useAddPreconnectOnce from '../useAddPreconnectOnce';
-import SongSearchResultListDummyItem from './SongSearchResultListDummyItem';
 import SearchResultListItem from './SongSearchResultListItem';
-import {SearchDataResponse} from '../../spotifyDataTypes/spotifyDataTypes';
+import {SearchDataResponse} from '../../DataTypes/spotifyDataTypes';
 
 const styleObj = {height: 'calc(100% - 60px)'};
-
-const dummyCallback = (_index, _item) => <SongSearchResultListDummyItem />;
 
 type TrackObjectMinimumed = {
   albumOfTrackImageUrl64px: string;
@@ -150,8 +128,7 @@ const useSpotifySearchApi = (searchTerm: string, type: 'track') => {
 
 const SongSearchResultList = (props: {query: string}) => {
   const {query} = props;
-  const {data, error, fetchNextPage, hasNextPage, isFetching} =
-    useSpotifySearchApi(query, 'track');
+  const {data, fetchNextPage} = useSpotifySearchApi(query, 'track');
 
   const listData = useMemo(
     () => data?.pages.map((page) => page.items).flat() ?? [],

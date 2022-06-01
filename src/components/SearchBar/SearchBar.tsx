@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import SearchIcon from './SearchIcon';
 
@@ -41,7 +40,7 @@ const SearchBarButton = styled.button`
   padding: 12px;
 `;
 
-function SearchBar() {
+const SearchBar = () => {
   const inputRef = useRef(null);
   const [token, setToken] = useState({
     accessToken: null,
@@ -100,6 +99,6 @@ function SearchBar() {
       <button onClick={onPushedButton}>フェッチ</button>
     </SearchBarDiv>
   );
-}
+};
 
 export default SearchBar;

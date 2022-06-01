@@ -1,5 +1,4 @@
-import {setServers} from 'dns';
-import React, {memo, useState, FormEvent, useCallback, useReducer} from 'react';
+import React, {FormEvent, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import CrossSvgIcon from '../SvgIcon/CrossSvgIcon';
 import ClearButton from './ClearButton';

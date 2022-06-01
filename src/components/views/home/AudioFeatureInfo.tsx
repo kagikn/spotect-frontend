@@ -1,24 +1,9 @@
-import React, {useState, useEffect, FormEvent} from 'react';
-import {
-  Navigate,
-  useLocation,
-  useMatch,
-  useNavigate,
-} from '@tanstack/react-location';
+import React, {useState, useEffect} from 'react';
+import {useLocation, useMatch} from '@tanstack/react-location';
 import {useTranslation} from 'react-i18next';
 import {nanoid} from 'nanoid';
 import {useQuery} from 'react-query';
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-} from 'recharts';
 import {css} from '@emotion/css';
-import styled from 'styled-components';
-import {color} from '@chakra-ui/system';
 import {
   ArtistMinimumObject,
   SpotifyApiError,
@@ -29,7 +14,7 @@ import Progress from './Progress';
 import ColorQuantizer, {
   GeneratedSwatchType,
 } from '../../../color_classes/ColorQuantizer';
-import Color, {Rgb} from '../../../color_classes/Color';
+import Color from '../../../color_classes/Color';
 import SvgIcon from '../../SvgIcon/SvgIcon';
 import PageNotFoundView from './PageNotFoundView';
 import PageLoadingFailedView from './PageLoadingFailedView';
