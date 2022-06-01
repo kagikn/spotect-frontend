@@ -1,5 +1,10 @@
 import React, {useState, useEffect, FormEvent} from 'react';
-import {useLocation, useMatch, useNavigate} from '@tanstack/react-location';
+import {
+  Navigate,
+  useLocation,
+  useMatch,
+  useNavigate,
+} from '@tanstack/react-location';
 import {useTranslation} from 'react-i18next';
 import {nanoid} from 'nanoid';
 import {useQuery} from 'react-query';
@@ -13,24 +18,21 @@ import {
 } from 'recharts';
 import {css} from '@emotion/css';
 import styled from 'styled-components';
-import {TrackObject} from '../../../spotifyDataTypes/spotifyDataTypes';
+import {color} from '@chakra-ui/system';
+import {
+  ArtistMinimumObject,
+  SpotifyApiError,
+  SpotifyApiErrorResponse,
+  TrackObject,
+} from '../../../DataTypes/spotifyDataTypes';
 import Progress from './Progress';
 import ColorQuantizer, {
   GeneratedSwatchType,
 } from '../../../color_classes/ColorQuantizer';
-import Color from '../../../color_classes/Color';
+import Color, {Rgb} from '../../../color_classes/Color';
 import SvgIcon from '../../SvgIcon/SvgIcon';
-
-const GradDiv = styled.div`
-  display: block;
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  background: linear-gradient(transparent 0, rgba(0, 0, 0, 0.5) 100%),
-    url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iLjA1IiBkPSJNMCAwaDMwMHYzMDBIMHoiLz48L3N2Zz4=');
-`;
+import PageNotFoundView from './PageNotFoundView';
+import PageLoadingFailedView from './PageLoadingFailedView';
 
 function* Rgb32BitGenerator(t: ArrayBufferLike, pixelCountToPick: number) {
   const r = new Uint32Array(t);
@@ -104,146 +106,113 @@ const useColor = (imgUrl: string, canvasSize: number) => {
   return swatchColor;
 };
 
-const AudioFeatureInfo = (): JSX.Element => {
-  const [backgroundColCss, setBackgroundColCss] = useState<string>(null);
-  const mat = useMatch();
-  const {t} = useTranslation();
-  const location = useLocation();
+type AudioFeatureMinimum = {
+  acousticness: number;
+  danceability: number;
+  energy: number;
+  instrumentalness: number;
+  liveness: number;
+  speechiness: number;
+  valence: number;
+};
 
-  const {trackId} = mat.data;
+const useAudioFeatureApi = (trackId: string) =>
+  useQuery<AudioFeatureMinimum, SpotifyApiError | TypeError>(
+    ['audio-features', trackId],
+    async () => {
+      const fetchedData = await fetch(
+        `${import.meta.env.REACT_APP_API_BASE_URL}/v1/audio-features/${trackId}`
+      );
 
-  const {data, error} = useQuery(['audio-features', trackId], async () => {
-    const fetchedData = await fetch(
-      `${import.meta.env.REACT_APP_API_BASE_URL}/v1/audio-features/${trackId}`
-    );
+      const jsonData = await fetchedData.json();
 
-    if (!fetchedData.ok) {
-      throw Error();
+      if (jsonData.error) {
+        const jsonErrorData = jsonData.error as SpotifyApiErrorResponse;
+        throw new SpotifyApiError(jsonErrorData.status, jsonErrorData.message);
+      }
+
+      return (({
+        acousticness,
+        danceability,
+        energy,
+        instrumentalness,
+        liveness,
+        speechiness,
+        valence,
+      }) => ({
+        acousticness,
+        danceability,
+        energy,
+        instrumentalness,
+        liveness,
+        speechiness,
+        valence,
+      }))(jsonData);
     }
+  );
 
-    const jsonData = await fetchedData.json();
-
-    if (jsonData.error) {
-      throw Error();
-    }
-
-    return (({
-      acousticness,
-      danceability,
-      energy,
-      instrumentalness,
-      liveness,
-      speechiness,
-      valence,
-    }) => ({
-      acousticness,
-      danceability,
-      energy,
-      instrumentalness,
-      liveness,
-      speechiness,
-      valence,
-    }))(jsonData);
-  });
-
-  const {data: getTrackData} = useQuery(
+const useTrackApi = (trackId: string) =>
+  useQuery<TrackObject, SpotifyApiErrorResponse>(
     ['spotify-tracks', trackId],
     async () => {
       const fetchedData = await fetch(
         `${import.meta.env.REACT_APP_API_BASE_URL}/v1/tracks/${trackId}`
       );
 
-      if (!fetchedData.ok) {
-        throw Error();
-      }
-
-      const jsonData = (await fetchedData.json()) as TrackObject;
+      const jsonData = await fetchedData.json();
 
       if (jsonData.error) {
-        throw Error();
+        const jsonErrorData = jsonData.error as SpotifyApiErrorResponse;
+        throw new SpotifyApiError(jsonErrorData.status, jsonErrorData.message);
       }
 
-      return jsonData;
+      return jsonData as TrackObject;
     }
   );
 
-  const musicMood = data as any;
+const concatArtistsName = (artists: ArtistMinimumObject[]) =>
+  artists?.map((x) => x.name).join(', ') ?? '';
 
-  const barColor = 'var(--spotify-brand-color-bright)';
+const ResultView = (
+  audioFeatureItems: {
+    value: number;
+    color: string;
+    backgroundColor: string;
+    caption: string;
+  }[],
+  trackApiData: TrackObject,
+  upperBackgroundColorStr: string,
+  backButtonCallback: React.MouseEventHandler<HTMLButtonElement>
+) => {
+  const songName = trackApiData?.name ?? '';
+  const trackImgUrl = trackApiData?.albumOfTrack.coverArt.sources[1].url;
+  const artistNameConcatted = concatArtistsName(trackApiData?.artists);
 
-  const items = musicMood
-    ? [
-        {
-          value: musicMood.acousticness * 100,
-          color: barColor,
-          backgroundColor: '#393939',
-          caption: t('show-audio-features.acousticness'),
-        },
-        {
-          value: musicMood.danceability * 100,
-          color: barColor,
-          backgroundColor: '#393939',
-          caption: t('show-audio-features.danceability'),
-        },
-        {
-          value: musicMood.energy * 100,
-          color: barColor,
-          backgroundColor: '#393939',
-          caption: t('show-audio-features.energy'),
-        },
-        {
-          value: musicMood.instrumentalness * 100,
-          color: barColor,
-          backgroundColor: '#393939',
-          caption: t('show-audio-features.instrumentalness'),
-        },
-        {
-          value: musicMood.liveness * 100,
-          color: barColor,
-          backgroundColor: '#393939',
-          caption: t('show-audio-features.liveness'),
-        },
-        {
-          value: musicMood.speechiness * 100,
-          color: barColor,
-          backgroundColor: '#393939',
-          caption: t('show-audio-features.speechiness'),
-        },
-        {
-          value: musicMood.valence * 100,
-          color: barColor,
-          backgroundColor: '#393939',
-          caption: t('show-audio-features.valence'),
-        },
-      ]
-    : [];
-
-  const songName = getTrackData?.name;
-  const trackImgUrl = getTrackData?.albumOfTrack.coverArt.sources[1].url;
-  const artistName = getTrackData?.artists.map((x) => x.name).join(', ');
-
-  const aa = useColor(
-    getTrackData?.albumOfTrack.coverArt.sources[1].url,
-    300
-  )?.visRefSwatch;
-
-  if (error) return <div>Error Occured!</div>;
-  if (!data) return null;
-
-  const rgbaCol = aa?.color.rgb;
-  const rgbColStr = rgbaCol
-    ? `rgb(${rgbaCol.r}, ${rgbaCol.g}, ${rgbaCol.b})`
-    : `transparent`;
-  const rgbaColStr = rgbaCol
-    ? `rgba(${rgbaCol.r}, ${rgbaCol.g}, ${rgbaCol.b}, 0.1)`
-    : `transparent`;
+  // eslint-disable-next-line react/destructuring-assignment
+  const mappedAudioFeatureList = audioFeatureItems.map((item) => (
+    <div className="py-2" key={nanoid()}>
+      {item.caption ? (
+        <p className="py-1">{`${item.caption}: ${item.value.toFixed(1)}`}</p>
+      ) : null}
+      <Progress
+        value={item.value}
+        height="20px"
+        color={item.color}
+        backgroundColor={item.backgroundColor}
+        borderRadius="1.5rem"
+      />
+    </div>
+  ));
 
   return (
     <>
       <div className="relative flex flex-col gap-y-2 p-4 pt-[4.5rem]">
         <div
           className={`block h-full w-full absolute top-0 left-0 z-[-1] ${css`
-            background: linear-gradient(${rgbColStr} 0, transparent 100%);
+            background: linear-gradient(
+              ${upperBackgroundColorStr} 0,
+              transparent 100%
+            );
           `}`}
         />
         <button
@@ -251,9 +220,7 @@ const AudioFeatureInfo = (): JSX.Element => {
           className="w-8 h-8 inline-flex items-center justify-center cursor-pointer absolute rounded-full top-4 left-4 bg-gray-700"
           aria-hidden
           aria-label="戻る"
-          onClick={() => {
-            location.history.back();
-          }}>
+          onClick={backButtonCallback}>
           <SvgIcon width={22} height={22} viewBox="0 0 24 24">
             <path d="M15.957 2.793a1 1 0 010 1.414L8.164 12l7.793 7.793a1 1 0 11-1.414 1.414L5.336 12l9.207-9.207a1 1 0 011.414 0z" />
           </SvgIcon>
@@ -270,32 +237,132 @@ const AudioFeatureInfo = (): JSX.Element => {
         ) : (
           <div className="w-40 h-8 py-1 bg-clip-content rounded-2xl bg-gray-700" />
         )}
-        {artistName ? (
-          <p className="font-bold">{artistName}</p>
+        {artistNameConcatted ? (
+          <p className="font-bold">{artistNameConcatted}</p>
         ) : (
           <div className="w-24 h-6 bg-clip-content rounded-xl bg-gray-700" />
         )}
       </div>
       <div className="bg-transparent p-4 mx-auto">
         <p className="font-bold text-lg">Mood</p>
-        {items.map((item) => (
-          <div className="py-2" key={nanoid()}>
-            {item.caption ? (
-              <p className="py-1">{`${item.caption}: ${item.value.toFixed(
-                1
-              )}`}</p>
-            ) : null}
-            <Progress
-              value={item.value}
-              height="20px"
-              color={item.color}
-              backgroundColor={item.backgroundColor}
-              borderRadius="1.5rem"
-            />
-          </div>
-        ))}
+        {mappedAudioFeatureList}
       </div>
     </>
+  );
+};
+
+const AudioFeatureInfo = (): JSX.Element => {
+  const mat = useMatch();
+  const {t} = useTranslation();
+  const location = useLocation();
+
+  const {trackId} = mat.data;
+  const audioFeatureQueryResult = useAudioFeatureApi(trackId);
+  const trackApiQueryResult = useTrackApi(trackId);
+
+  const audioFeatureData = audioFeatureQueryResult.isFetched
+    ? audioFeatureQueryResult.data
+    : null;
+  const barColor = 'var(--spotify-brand-color-bright)';
+  const audioFeatureListItems = audioFeatureData
+    ? [
+        {
+          value: audioFeatureData.acousticness * 100,
+          color: barColor,
+          backgroundColor: '#393939',
+          caption: t('show-audio-features.acousticness'),
+        },
+        {
+          value: audioFeatureData.danceability * 100,
+          color: barColor,
+          backgroundColor: '#393939',
+          caption: t('show-audio-features.danceability'),
+        },
+        {
+          value: audioFeatureData.energy * 100,
+          color: barColor,
+          backgroundColor: '#393939',
+          caption: t('show-audio-features.energy'),
+        },
+        {
+          value: audioFeatureData.instrumentalness * 100,
+          color: barColor,
+          backgroundColor: '#393939',
+          caption: t('show-audio-features.instrumentalness'),
+        },
+        {
+          value: audioFeatureData.liveness * 100,
+          color: barColor,
+          backgroundColor: '#393939',
+          caption: t('show-audio-features.liveness'),
+        },
+        {
+          value: audioFeatureData.speechiness * 100,
+          color: barColor,
+          backgroundColor: '#393939',
+          caption: t('show-audio-features.speechiness'),
+        },
+        {
+          value: audioFeatureData.valence * 100,
+          color: barColor,
+          backgroundColor: '#393939',
+          caption: t('show-audio-features.valence'),
+        },
+      ]
+    : [];
+
+  const trackApiData = trackApiQueryResult.isFetched
+    ? trackApiQueryResult.data
+    : null;
+
+  const featuredColorOfImage = useColor(
+    trackApiData ? trackApiData.albumOfTrack.coverArt.sources[1].url : null,
+    300
+  )?.visRefSwatch;
+
+  if (audioFeatureQueryResult.error) {
+    const audioFeatureErrorInst = audioFeatureQueryResult.error;
+    if (
+      audioFeatureErrorInst instanceof SpotifyApiError &&
+      audioFeatureErrorInst.httpStatusCode === 400
+    ) {
+      return <PageNotFoundView />;
+    }
+
+    const retryFetch = () => {
+      audioFeatureQueryResult.refetch();
+      trackApiQueryResult.refetch();
+    };
+    return <PageLoadingFailedView onRetryButtonClick={retryFetch} />;
+  }
+  if (trackApiQueryResult.error) {
+    const audioFeatureErrorInst = trackApiQueryResult.error;
+    if (
+      audioFeatureErrorInst instanceof SpotifyApiError &&
+      audioFeatureErrorInst.httpStatusCode === 400
+    ) {
+      return <PageNotFoundView />;
+    }
+
+    const retryFetch = () => {
+      audioFeatureQueryResult.refetch();
+      trackApiQueryResult.refetch();
+    };
+    return <PageLoadingFailedView onRetryButtonClick={retryFetch} />;
+  }
+
+  const rgbObj = featuredColorOfImage?.color;
+  const rgbColStr = rgbObj?.toCSS() ?? 'transparent';
+
+  const backButtonCallback = () => {
+    location.history.back();
+  };
+
+  return ResultView(
+    audioFeatureListItems,
+    trackApiData,
+    rgbColStr,
+    backButtonCallback
   );
 };
 

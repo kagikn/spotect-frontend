@@ -5,7 +5,15 @@ import {routes} from './Router';
 
 const location = new ReactLocation();
 const queryClient = new QueryClient({
-  defaultOptions: {queries: {retry: false, staleTime: Infinity}},
+  defaultOptions: {
+    queries: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      retry: false,
+      retryOnMount: false,
+      staleTime: Infinity,
+    },
+  },
 });
 
 const App = () => (

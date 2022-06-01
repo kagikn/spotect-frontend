@@ -35,3 +35,17 @@ export type SearchDataResponse = {
   };
   totalCount: number;
 };
+
+export type SpotifyApiErrorResponse = {
+  status: number;
+  message: string;
+};
+
+export class SpotifyApiError extends Error {
+  httpStatusCode: number;
+
+  constructor(httpStatusCode: number, message: string) {
+    super(message);
+    this.httpStatusCode = httpStatusCode;
+  }
+}

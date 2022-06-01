@@ -36,6 +36,10 @@ i18n
             'input-aria-label': 'Search',
             'input-placeholder': 'Songs',
             'clear-search-field-aria-label': 'Clear search field',
+            'no-internet-connection-error': {
+              'big-message': 'No internet connection',
+              'small-message': 'Go online to search again.',
+            },
           },
           'show-audio-features': {
             acousticness: 'Acousticness',
@@ -46,6 +50,16 @@ i18n
             speechiness: 'Speechiness',
             valence: 'Valence',
           },
+          'not-found-view': {
+            'big-message': 'Page not found',
+            'small-message':
+              'We can’t seem to find the page you are looking for.',
+          },
+          'page-loading-failed-view': {
+            'big-message': "Couldn't load the page.",
+            'small-message': 'Try again?',
+            'reload-button': 'RELOAD',
+          },
         },
       },
       ja: {
@@ -54,6 +68,11 @@ i18n
             'input-aria-label': '検索',
             'input-placeholder': '曲を検索',
             'clear-search-field-aria-label': '検索フィールドをクリア',
+            'no-internet-connection-error': {
+              'big-message': 'インターネットに接続していません',
+              'small-message':
+                'インターネットに接続してから再検索してください。',
+            },
           },
           'show-audio-features': {
             acousticness: 'アコースティック度',
@@ -63,6 +82,15 @@ i18n
             liveness: 'ライブ度',
             speechiness: 'スピーチ感',
             valence: 'ポジティブ度',
+          },
+          'not-found-view': {
+            'big-message': 'ページが見つかりません',
+            'small-message': 'お探しのページが見つかりません。',
+          },
+          'page-loading-failed-view': {
+            'big-message': 'ページを読み込めませんでした',
+            'small-message': '再試行しますか？',
+            'reload-button': '再読み込み',
           },
         },
       },
