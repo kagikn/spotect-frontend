@@ -36,6 +36,11 @@ i18n
             'input-aria-label': 'Search',
             'input-placeholder': 'Songs',
             'clear-search-field-aria-label': 'Clear search field',
+            'no-result-item-error': {
+              'big-message': 'Couldn\'t find "{{query}}"',
+              'small-message':
+                'Try searching again using a different spelling or keyword.',
+            },
             'no-internet-connection-error': {
               'big-message': 'No internet connection',
               'small-message': 'Go online to search again.',
@@ -68,6 +73,10 @@ i18n
             'input-aria-label': '検索',
             'input-placeholder': '曲を検索',
             'clear-search-field-aria-label': '検索フィールドをクリア',
+            'no-result-item-error': {
+              'big-message': '「{{query}}」 に 一致する結果はありません',
+              'small-message': '別のキーワードでもう一度検索してください。',
+            },
             'no-internet-connection-error': {
               'big-message': 'インターネットに接続していません',
               'small-message':

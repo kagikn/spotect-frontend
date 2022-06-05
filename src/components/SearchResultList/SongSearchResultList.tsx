@@ -1,9 +1,11 @@
 import React, {useEffect, useMemo, useRef} from 'react';
 import {useQueryClient, useInfiniteQuery} from 'react-query';
 import {Virtuoso} from 'react-virtuoso';
+import {useTranslation} from 'react-i18next';
 import addMemorizedPreconnectOnce from '../AddPreconnectOnce';
 import SearchResultListItem from './SongSearchResultListItem';
 import {SearchDataResponse} from '../../DataTypes/spotifyDataTypes';
+import PageLoadingFailedView from '../views/home/PageLoadingFailedView';
 
 const styleObj = {height: 'calc(100% - 60px)'};
 
@@ -119,21 +121,62 @@ const useSpotifySearchApi = (searchTerm: string, type: 'track') => {
         'error',
         'fetchNextPage',
         'hasNextPage',
-        'isFetching',
+        'isFetched',
+        'refetch',
       ],
       enabled: isSearchTermNonBlank,
     }
   );
 };
 
+const NoResultItemView = (props: {query: string}) => {
+  const {t} = useTranslation();
+
+  const {query} = props;
+  const truncatedQuery =
+    query.length > 15 ? `${query.substring(0, 15)}...` : query;
+
+  return (
+    <div className="flex flex-col leading-6 justify-center items-center h-full m-auto">
+      <div className="text-center">
+        <h1 className="font-bold text-xl my-4 tracking-[-0.04em]">
+          {t('search.no-result-item-error.big-message', {
+            query: truncatedQuery,
+          })}
+        </h1>
+        <p className="mb-10">
+          {t('search.no-result-item-error.small-message')}
+        </p>
+      </div>
+    </div>
+  );
+};
+
 const SongSearchResultList = (props: {query: string}) => {
   const {query} = props;
-  const {data, fetchNextPage} = useSpotifySearchApi(query, 'track');
+  const {data, error, fetchNextPage, isFetched, hasNextPage, refetch} =
+    useSpotifySearchApi(query, 'track');
 
   const listData = useMemo(
     () => data?.pages.map((page) => page.items).flat() ?? [],
     [data]
   );
+
+  if (error) {
+    const onButtonClick = () => {
+      if (hasNextPage) {
+        fetchNextPage();
+        return;
+      }
+
+      refetch();
+    };
+    return <PageLoadingFailedView onRetryButtonClick={onButtonClick} />;
+  }
+
+  if (!listData.length && isFetched) {
+    return <NoResultItemView query={query} />;
+  }
 
   return (
     <Virtuoso
