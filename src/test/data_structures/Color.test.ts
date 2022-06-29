@@ -1,3 +1,4 @@
+import {vi, describe, expect, test} from 'vitest';
 import Color from '../../color_classes/Color';
 
 describe('static constructor functions', () => {

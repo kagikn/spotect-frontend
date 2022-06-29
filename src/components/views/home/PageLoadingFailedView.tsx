@@ -19,7 +19,8 @@ const PageLoadingFailedView = (props: {
         <button
           type="button"
           className="bg-white text-black font-bold rounded-full px-8 pt-[11px] pb-[9px] no-underline"
-          onClick={onClickProp}>
+          onClick={onClickProp}
+          data-testid="pageLoadingFailedViewRetryButton">
           {t('page-loading-failed-view.reload-button')}
         </button>
       ) : null}

@@ -1,3 +1,4 @@
+import {vi, describe, expect, test} from 'vitest';
 import PriorityQueue from '../../data_structures/PriorityQueue';
 
 describe('push and pop tests', () => {

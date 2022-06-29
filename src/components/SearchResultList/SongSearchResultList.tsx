@@ -1,26 +1,16 @@
-import React, {useEffect, useMemo, useRef} from 'react';
-import {useQueryClient, useInfiniteQuery} from 'react-query';
+import React, {useMemo} from 'react';
 import {Virtuoso} from 'react-virtuoso';
 import {useTranslation} from 'react-i18next';
-import addMemorizedPreconnectOnce from '../AddPreconnectOnce';
 import SearchResultListItem from './SongSearchResultListItem';
-import {SearchDataResponse} from '../../DataTypes/spotifyDataTypes';
+import {TrackObjectMinimum} from '../../DataTypes/spotifyDataTypes';
 import PageLoadingFailedView from '../views/home/PageLoadingFailedView';
+import useSpotifySearchApi from '../../features/search-tracks/hooks/useSpotifySearchApi';
 
 const styleObj = {height: 'calc(100% - 60px)'};
 
-type TrackObjectMinimumed = {
-  albumOfTrackImageUrl64px: string;
-  albumOfTrackImageUrl300px: string;
-  artistNames: string[];
-  explicit: boolean;
-  id: string;
-  name: string;
-};
-
 const trackObjectToSongSearchResultListItemContent2 = (
   index,
-  item: TrackObjectMinimumed
+  item: TrackObjectMinimum
 ) => {
   const {
     id,
@@ -40,92 +30,6 @@ const trackObjectToSongSearchResultListItemContent2 = (
       href={`/show-audio-features/${id}`}
       explicit={item.explicit}
     />
-  );
-};
-
-const selectSearchResponseItemToSmallerSubset = (res: SearchDataResponse) => {
-  const itemsConved = res.items.map((item) => {
-    const {albumOfTrack, artists, explicit, id, name} = item;
-    const coverArtSources = albumOfTrack.coverArt.sources;
-
-    return {
-      albumOfTrackImageUrl64px: coverArtSources[2].url,
-      albumOfTrackImageUrl300px: coverArtSources[1].url,
-      artistNames: artists.map((arsistItem) => arsistItem.name),
-      explicit,
-      id,
-      name,
-    };
-  });
-
-  return {
-    ...res,
-    items: itemsConved,
-  };
-};
-
-function usePrevious(value, initial) {
-  const ref = useRef({target: value, previous: initial});
-  if (ref.current.target !== value) {
-    ref.current.previous = ref.current.target;
-    ref.current.target = value;
-  }
-  return ref.current.previous;
-}
-
-const useSpotifySearchApi = (searchTerm: string, type: 'track') => {
-  const [a] = React.useState(() => addMemorizedPreconnectOnce());
-
-  const prevQueryTerm = usePrevious(searchTerm, searchTerm);
-
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    if (searchTerm !== prevQueryTerm) {
-      queryClient.cancelQueries(`searchForTracks:${prevQueryTerm}`);
-    }
-  });
-
-  const isSearchTermNonBlank = searchTerm !== '';
-
-  return useInfiniteQuery(
-    `searchForTracks:${searchTerm}`,
-    async ({pageParam = 0, signal}) => {
-      a('https://i.scdn.co');
-      a(import.meta.env.REACT_APP_API_BASE_URL);
-      const res = await fetch(
-        `${
-          import.meta.env.REACT_APP_API_BASE_URL
-        }/v1/search?type=${type}&limit=50&q=${searchTerm}${
-          pageParam !== 0 ? `&offset=${pageParam}` : ''
-        }`,
-        {signal}
-      );
-      return res.json();
-    },
-    {
-      select: (dataToSelect) => {
-        const {pages: dataPages, pageParams: dataPageParams} = dataToSelect;
-        const dataPagesConverted = dataPages.map(
-          selectSearchResponseItemToSmallerSubset
-        );
-
-        return {
-          pages: dataPagesConverted,
-          pageParams: dataPageParams,
-        };
-      },
-      getNextPageParam: (lastPage: SearchDataResponse) =>
-        lastPage.pagingInfo?.nextOffset ?? undefined,
-      notifyOnChangeProps: [
-        'data',
-        'error',
-        'fetchNextPage',
-        'hasNextPage',
-        'isFetched',
-        'refetch',
-      ],
-      enabled: isSearchTermNonBlank,
-    }
   );
 };
 
@@ -183,7 +87,7 @@ const SongSearchResultList = (props: {query: string}) => {
       style={styleObj}
       endReached={fetchNextPage as (number) => void}
       data={listData ?? undefined}
-      overscan={800}
+      overscan={200}
       itemContent={trackObjectToSongSearchResultListItemContent2}
     />
   );

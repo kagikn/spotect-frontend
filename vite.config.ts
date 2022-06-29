@@ -1,25 +1,16 @@
-import {defineConfig, UserConfig} from 'vite';
+import {defineConfig, UserConfig, UserConfigExport} from 'vite';
 import react from '@vitejs/plugin-react';
+import EnvironmentPlugin from 'vite-plugin-environment';
 
 export default defineConfig(({command}) => {
   const generalCfg: UserConfig = {
-    publicDir: false,
     base: '/',
     envPrefix: 'REACT_APP_',
-    plugins: [react()],
+    plugins: [react(), EnvironmentPlugin('all', {prefix: 'REACT_APP_'})],
   };
   if (command === 'serve') {
     return {
       ...generalCfg,
-      server: {
-        proxy: {
-          '/api': {
-            target: 'http://localhost:8000',
-            changeOrigin: false,
-            rewrite: (path) => path.replace(/^\/api/, ''),
-          },
-        },
-      },
     };
   }
   return {

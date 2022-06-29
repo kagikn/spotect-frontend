@@ -2,12 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {useLocation, useMatch} from '@tanstack/react-location';
 import {useTranslation} from 'react-i18next';
 import {nanoid} from 'nanoid';
-import {useQuery} from 'react-query';
 import {css} from '@emotion/css';
 import {
   ArtistMinimumObject,
   SpotifyApiError,
-  SpotifyApiErrorResponse,
   TrackObject,
 } from '../../../DataTypes/spotifyDataTypes';
 import Progress from './Progress';
@@ -18,6 +16,8 @@ import Color from '../../../color_classes/Color';
 import SvgIcon from '../../SvgIcon/SvgIcon';
 import PageNotFoundView from './PageNotFoundView';
 import PageLoadingFailedView from './PageLoadingFailedView';
+import useTrackApi from '../../../features/audio-features/hooks/useTrackApi';
+import useAudioFeaturesApi from '../../../features/audio-features/hooks/useAudioFeaturesApi';
 
 function* Rgb32BitGenerator(t: ArrayBufferLike, pixelCountToPick: number) {
   const r = new Uint32Array(t);
@@ -90,70 +90,6 @@ const useColor = (imgUrl: string, canvasSize: number) => {
 
   return swatchColor;
 };
-
-type AudioFeatureMinimum = {
-  acousticness: number;
-  danceability: number;
-  energy: number;
-  instrumentalness: number;
-  liveness: number;
-  speechiness: number;
-  valence: number;
-};
-
-const useAudioFeatureApi = (trackId: string) =>
-  useQuery<AudioFeatureMinimum, SpotifyApiError | TypeError>(
-    ['audio-features', trackId],
-    async () => {
-      const fetchedData = await fetch(
-        `${import.meta.env.REACT_APP_API_BASE_URL}/v1/audio-features/${trackId}`
-      );
-
-      const jsonData = await fetchedData.json();
-
-      if (jsonData.error) {
-        const jsonErrorData = jsonData.error as SpotifyApiErrorResponse;
-        throw new SpotifyApiError(jsonErrorData.status, jsonErrorData.message);
-      }
-
-      return (({
-        acousticness,
-        danceability,
-        energy,
-        instrumentalness,
-        liveness,
-        speechiness,
-        valence,
-      }) => ({
-        acousticness,
-        danceability,
-        energy,
-        instrumentalness,
-        liveness,
-        speechiness,
-        valence,
-      }))(jsonData);
-    }
-  );
-
-const useTrackApi = (trackId: string) =>
-  useQuery<TrackObject, SpotifyApiErrorResponse>(
-    ['spotify-tracks', trackId],
-    async () => {
-      const fetchedData = await fetch(
-        `${import.meta.env.REACT_APP_API_BASE_URL}/v1/tracks/${trackId}`
-      );
-
-      const jsonData = await fetchedData.json();
-
-      if (jsonData.error) {
-        const jsonErrorData = jsonData.error as SpotifyApiErrorResponse;
-        throw new SpotifyApiError(jsonErrorData.status, jsonErrorData.message);
-      }
-
-      return jsonData as TrackObject;
-    }
-  );
 
 const concatArtistsName = (artists: ArtistMinimumObject[]) =>
   artists?.map((x) => x.name).join(', ') ?? '';
@@ -242,7 +178,7 @@ const AudioFeatureInfo = (): JSX.Element => {
   const location = useLocation();
 
   const {trackId} = mat.data;
-  const audioFeatureQueryResult = useAudioFeatureApi(trackId);
+  const audioFeatureQueryResult = useAudioFeaturesApi(trackId);
   const trackApiQueryResult = useTrackApi(trackId);
 
   const audioFeatureData = audioFeatureQueryResult.isFetched

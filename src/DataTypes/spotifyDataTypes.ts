@@ -49,3 +49,38 @@ export class SpotifyApiError extends Error {
     this.httpStatusCode = httpStatusCode;
   }
 }
+
+export type TrackObjectMinimum = {
+  albumOfTrackImageUrl64px: string;
+  albumOfTrackImageUrl300px: string;
+  artistNames: string[];
+  explicit: boolean;
+  id: string;
+  name: string;
+};
+
+export type AudioFeaturesCustom = {
+  acousticness: number;
+  danceability: number;
+  duration_ms: number;
+  energy: number;
+  instrumentalness: number;
+  key: number;
+  liveness: number;
+  loudness: number;
+  mode: number;
+  speechiness: number;
+  tempo: number;
+  time_signature: number;
+  valence: number;
+};
+
+export type AudioFeaturesCustomMinimum = {
+  acousticness: number;
+  danceability: number;
+  energy: number;
+  instrumentalness: number;
+  liveness: number;
+  speechiness: number;
+  valence: number;
+};

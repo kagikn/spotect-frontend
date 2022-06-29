@@ -57,6 +57,7 @@ const SearchBarForForm = (props: {
           spellCheck="false"
           aria-label={inputAriaLabel}
           placeholder={inputSearchPlaceholder}
+          data-testid="searchBarFormInput"
         />
       </form>
       {value !== '' ? (

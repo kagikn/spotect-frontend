@@ -13,7 +13,8 @@ type SearchResultListItemProps = {
 const SearchResultListItem = React.memo((props: SearchResultListItemProps) => (
   <Link
     className="h-[4.5rem] grid grid-cols-[52px_1fr] px-4 py-2 items-center gap-3.5 text-inherit no-underline active:bg-black"
-    to={props.href}>
+    to={props.href}
+    data-testid="searchResultListItem">
     <img
       className="bg-gray-800"
       src={props.img}
