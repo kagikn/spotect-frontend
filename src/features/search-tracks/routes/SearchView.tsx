@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {useCallback, useEffect} from 'react';
 import {useMatch, useNavigate} from '@tanstack/react-location';
 import {SvgIcon} from '@/components/Elements/SvgIcon';
 import SongSearchResultList from '../components/SongSearchResultList';
@@ -13,8 +13,10 @@ export const SearchView = (): JSX.Element => {
 
   const onChangeCallback = useCallback(
     (e) => {
+      const queryUri = encodeURIComponent(e.target.value.trimEnd());
+      const targetUrl = queryUri !== '' ? `/search/${queryUri}` : '/search';
       navigate({
-        to: `/search/${encodeURIComponent(e.target.value.trimEnd())}`,
+        to: targetUrl,
         replace: true,
       });
     },

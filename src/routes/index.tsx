@@ -13,6 +13,13 @@ export const routes: Route[] = [
     path: '/search',
     children: [
       {
+        path: '/',
+        element: <SearchView />,
+        loader: async ({params: {query}}) => ({
+          query: '',
+        }),
+      },
+      {
         path: ':query',
         element: <SearchView />,
         loader: async ({params: {query}}) => ({
