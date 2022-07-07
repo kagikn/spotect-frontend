@@ -1,0 +1,33 @@
+{
+  "search": {
+    "input-aria-label": "Search",
+    "input-placeholder": "Songs",
+    "clear-search-field-aria-label": "Clear search field",
+    "no-result-item-error": {
+      "big-message": "Couldn't find \"{{query}}\"",
+      "small-message": "Try searching again using a different spelling or keyword."
+    },
+    "no-internet-connection-error": {
+      "big-message": "No internet connection",
+      "small-message": "Go online to search again."
+    }
+  },
+  "show-audio-features": {
+    "acousticness": "Acousticness",
+    "danceability": "Danceability",
+    "energy": "Energy",
+    "instrumentalness": "Instrumentalness",
+    "liveness": "Liveness",
+    "speechiness": "Speechiness",
+    "valence": "Valence"
+  },
+  "not-found-view": {
+    "big-message": "Page not found",
+    "small-message": "We can’t seem to find the page you are looking for."
+  },
+  "page-loading-failed-view": {
+    "big-message": "Couldn't load the page.",
+    "small-message": "Try again?",
+    "reload-button": "RELOAD"
+  }
+}

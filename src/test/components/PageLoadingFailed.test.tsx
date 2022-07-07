@@ -1,7 +1,6 @@
-import React from 'react';
 import {render, screen, fireEvent} from '@testing-library/react';
 import {vi, test, expect} from 'vitest';
-import PageLoadingFailedView from '../../components/views/home/PageLoadingFailedView';
+import PageLoadingFailedView from '@/components/Layout/PageLoadingFailedView';
 
 vi.useFakeTimers();
 

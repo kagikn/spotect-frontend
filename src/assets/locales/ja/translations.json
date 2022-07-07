@@ -1,0 +1,33 @@
+{
+  "search": {
+    "input-aria-label": "検索",
+    "input-placeholder": "曲を検索",
+    "clear-search-field-aria-label": "検索フィールドをクリア",
+    "no-result-item-error": {
+      "big-message": "「{{query}}」 に 一致する結果はありません",
+      "small-message": "別のキーワードでもう一度検索してください。"
+    },
+    "no-internet-connection-error": {
+      "big-message": "インターネットに接続していません",
+      "small-message": "インターネットに接続してから再検索してください。"
+    }
+  },
+  "show-audio-features": {
+    "acousticness": "アコースティック度",
+    "danceability": "踊りやすさ",
+    "energy": "エネルギー",
+    "instrumentalness": "インスト度",
+    "liveness": "ライブ度",
+    "speechiness": "スピーチ感",
+    "valence": "ポジティブ度"
+  },
+  "not-found-view": {
+    "big-message": "ページが見つかりません",
+    "small-message": "お探しのページが見つかりません。"
+  },
+  "page-loading-failed-view": {
+    "big-message": "ページを読み込めませんでした",
+    "small-message": "再試行しますか？",
+    "reload-button": "再読み込み"
+  }
+}

@@ -3,7 +3,7 @@ import {
   SpotifyApiError,
   SpotifyApiErrorResponse,
   TrackObject,
-} from '../../../DataTypes/spotifyDataTypes';
+} from '../../../types/spotifyDataTypes';
 
 const useTrackApi = (trackId: string) =>
   useQuery<TrackObject, SpotifyApiErrorResponse>(

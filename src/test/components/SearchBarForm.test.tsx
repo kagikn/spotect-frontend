@@ -1,7 +1,6 @@
-import React from 'react';
 import {cleanup, render, screen, fireEvent} from '@testing-library/react';
 import {vi, test, expect, afterEach} from 'vitest';
-import SearchBarForForm from '../../components/SearchBar/SearchBarForForm';
+import SearchBarForForm from '@/features/search-tracks/components/SearchBarForForm';
 
 vi.useFakeTimers();
 

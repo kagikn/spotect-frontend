@@ -4,7 +4,7 @@ import {
   AudioFeaturesCustom,
   AudioFeaturesCustomMinimum,
   SpotifyApiError,
-} from '../../../DataTypes/spotifyDataTypes';
+} from '@/types/spotifyDataTypes';
 
 const audioFeatureCustomToMinimum = (audioFeature: AudioFeaturesCustom) =>
   (({

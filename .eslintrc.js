@@ -8,6 +8,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'airbnb',
     'airbnb-typescript',
+    'plugin:react/jsx-runtime',
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
@@ -19,8 +20,9 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['react', 'react-hooks', '@typescript-eslint'],
+  plugins: ['import', 'react', 'react-hooks', '@typescript-eslint'],
   rules: {
+    'import/no-unresolved': 'error',
     'react/function-component-definition': [
       2,
       {
@@ -29,6 +31,17 @@ module.exports = {
       },
     ],
     'react/jsx-props-no-spreading': [2, {custom: 'ignore'}],
+    'import/prefer-default-export': 'off',
+    'import/extensions': ['error', 'never'],
   },
-  settings: {},
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+      },
+    },
+  },
 };

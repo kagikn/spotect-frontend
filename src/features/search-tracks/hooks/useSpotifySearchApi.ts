@@ -1,7 +1,6 @@
-import React, {useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {useQueryClient, useInfiniteQuery} from 'react-query';
-import addMemorizedPreconnectOnce from '../../../components/AddPreconnectOnce';
-import {SearchDataResponse} from '../../../DataTypes/spotifyDataTypes';
+import {SearchDataResponse} from '@/types/spotifyDataTypes';
 
 const selectSearchResponseItemToSmallerSubset = (res: SearchDataResponse) => {
   const itemsConved = res.items.map((item) => {
@@ -34,8 +33,6 @@ function usePrevious(value, initial) {
 }
 
 const useSpotifySearchApi = (searchTerm: string, type: 'track') => {
-  const [a] = React.useState(() => addMemorizedPreconnectOnce());
-
   const prevQueryTerm = usePrevious(searchTerm, searchTerm);
 
   const queryClient = useQueryClient();
