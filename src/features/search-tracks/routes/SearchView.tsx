@@ -22,10 +22,17 @@ export const SearchView = (): JSX.Element => {
     },
     [navigate]
   );
+  const onClearCallback = useCallback(() => {
+    navigate({
+      to: '/search',
+      replace: true,
+    });
+  }, [navigate]);
 
   const {value, resettedOnLastValueChange, onChange, onClear} = useSearchInput(
     decodeURIComponent(query as string),
-    onChangeCallback
+    onChangeCallback,
+    onClearCallback
   );
 
   const queryValue = value.trimEnd();

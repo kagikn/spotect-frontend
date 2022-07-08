@@ -20,13 +20,6 @@ const SearchBarForForm = (props: {
     e.preventDefault();
   }, []);
 
-  const handleInputChange = useCallback(
-    (e) => {
-      e.preventDefault();
-      onInputChange?.(e);
-    },
-    [onInputChange]
-  );
   const clearInput = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -50,8 +43,8 @@ const SearchBarForForm = (props: {
         onSubmit={preventDefaultEventForForm}>
         <input
           className="text-white bg-transparent border-0 h-10 grow-1 shrink-0 basis-0 focus:outline-none w-full"
-          defaultValue={value}
-          onChange={handleInputChange}
+          value={value}
+          onChange={onInputChange}
           autoComplete="off"
           autoCapitalize="off"
           spellCheck="false"
