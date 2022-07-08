@@ -3,6 +3,10 @@
     "input-aria-label": "検索",
     "input-placeholder": "曲を検索",
     "clear-search-field-aria-label": "検索フィールドをクリア",
+    "empty-search-input": {
+      "big-message": "お気に入りの曲の特徴を調べよう",
+      "small-message": "楽曲、アーティストなどを検索し、音楽的な特徴を調べられます。"
+    },
     "no-result-item-error": {
       "big-message": "「{{query}}」 に 一致する結果はありません",
       "small-message": "別のキーワードでもう一度検索してください。"

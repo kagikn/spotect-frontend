@@ -56,6 +56,21 @@ const NoResultItemView = (props: {query: string}) => {
   );
 };
 
+const EmptySearchQueryView = () => {
+  const {t} = useTranslation();
+
+  return (
+    <div className="flex flex-col leading-6 justify-center items-center h-[calc(100%_-_64px)] m-auto">
+      <div className="text-center">
+        <h1 className="font-bold text-xl my-4 tracking-[-0.04em]">
+          {t('search.empty-search-input.big-message')}
+        </h1>
+        <p className="mb-10">{t('search.empty-search-input.small-message')}</p>
+      </div>
+    </div>
+  );
+};
+
 const SongSearchResultList = (props: {query: string}) => {
   const {query} = props;
   const {data, error, fetchNextPage, isFetched, hasNextPage, refetch} =
@@ -65,6 +80,10 @@ const SongSearchResultList = (props: {query: string}) => {
     () => data?.pages.map((page) => page.items).flat() ?? [],
     [data]
   );
+
+  if (query === '') {
+    return <EmptySearchQueryView />;
+  }
 
   if (error) {
     const onButtonClick = () => {

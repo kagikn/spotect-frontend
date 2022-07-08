@@ -3,6 +3,10 @@
     "input-aria-label": "Search",
     "input-placeholder": "Songs",
     "clear-search-field-aria-label": "Clear search field",
+    "empty-search-input": {
+      "big-message": "Inspect how the songs you like are",
+      "small-message": "Search for songs, artists, and then you can see how the song you selected is."
+    },
     "no-result-item-error": {
       "big-message": "Couldn't find \"{{query}}\"",
       "small-message": "Try searching again using a different spelling or keyword."
