@@ -30,7 +30,7 @@ const SearchBarForForm = (props: {
   );
 
   return (
-    <div className="bg-[#242424] rounded-xl h-10 px-3 flex items-center justify-center grow">
+    <div className="bg-white-0.05-opacity rounded-xl h-10 px-3 flex items-center justify-center grow">
       <SearchIcon
         stroke="#fff"
         width="24"

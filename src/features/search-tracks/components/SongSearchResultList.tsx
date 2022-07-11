@@ -6,7 +6,7 @@ import {TrackObjectMinimum} from '@/types/spotifyDataTypes';
 import SearchResultListItem from './SongSearchResultListItem';
 import useSpotifySearchApi from '../hooks/useSpotifySearchApi';
 
-const styleObj = {height: 'calc(100% - 60px)'};
+const styleObj = {height: '100%'};
 
 const trackObjectToSongSearchResultListItemContent2 = (
   index,
@@ -41,7 +41,7 @@ const NoResultItemView = (props: {query: string}) => {
     query.length > 15 ? `${query.substring(0, 15)}...` : query;
 
   return (
-    <div className="flex flex-col leading-6 justify-center items-center h-full m-auto">
+    <div className="h-full flex flex-col leading-6 justify-center items-center m-auto">
       <div className="text-center">
         <h1 className="font-bold text-xl my-4 tracking-[-0.04em]">
           {t('search.no-result-item-error.big-message', {
@@ -60,7 +60,7 @@ const EmptySearchQueryView = () => {
   const {t} = useTranslation();
 
   return (
-    <div className="flex flex-col leading-6 justify-center items-center h-[calc(100%_-_64px)] m-auto">
+    <div className="h-full flex flex-col leading-6 justify-center items-center m-auto">
       <div className="text-center">
         <h1 className="font-bold text-xl my-4 tracking-[-0.04em]">
           {t('search.empty-search-input.big-message')}
@@ -70,6 +70,8 @@ const EmptySearchQueryView = () => {
     </div>
   );
 };
+
+const ListHeader = () => <div className="h-16" />;
 
 const SongSearchResultList = (props: {query: string}) => {
   const {query} = props;
@@ -108,6 +110,7 @@ const SongSearchResultList = (props: {query: string}) => {
       data={listData ?? undefined}
       overscan={200}
       itemContent={trackObjectToSongSearchResultListItemContent2}
+      components={{Header: ListHeader}}
     />
   );
 };

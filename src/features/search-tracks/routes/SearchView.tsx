@@ -41,10 +41,10 @@ export const SearchView = (): JSX.Element => {
 
   return (
     <>
-      <div className="flex items-center justify-center min-w-0 h-16 bg-[#191919] py-0 px-3 sticky top-0 w-full z-[1]">
+      <div className="flex items-center justify-center min-w-0 h-16 bg-black-0.85-opacity py-0 px-3 fixed top-0 w-full z-[1] backdrop-blur-md">
         <button
           type="button"
-          className="w-8 h-8 bg-inherit border-inherit text-inherit cursor-pointer"
+          className="w-8 h-8 border-inherit text-inherit cursor-pointer"
           aria-hidden
           aria-label="戻る">
           <SvgIcon width={22} height={22}>
