@@ -42,15 +42,6 @@ export const SearchView = (): JSX.Element => {
   return (
     <>
       <div className="flex items-center justify-center min-w-0 h-16 bg-black-0.85-opacity py-0 px-3 fixed top-0 w-full z-[1] backdrop-blur-md">
-        <button
-          type="button"
-          className="w-8 h-8 border-inherit text-inherit cursor-pointer"
-          aria-hidden
-          aria-label="戻る">
-          <SvgIcon width={22} height={22}>
-            <path d="M15.957 2.793a1 1 0 010 1.414L8.164 12l7.793 7.793a1 1 0 11-1.414 1.414L5.336 12l9.207-9.207a1 1 0 011.414 0z" />
-          </SvgIcon>
-        </button>
         <SearchBarForm
           value={value}
           onInputChange={onChange}
