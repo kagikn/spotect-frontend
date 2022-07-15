@@ -1,4 +1,8 @@
 {
+  "bottom-menu": {
+    "home": "Home",
+    "search": "Search"
+  },
   "search": {
     "input-aria-label": "Search",
     "input-placeholder": "Songs",

@@ -15,6 +15,7 @@ type SvgPropParamsNoChildren = {
   role?: string;
   fill?: string;
   fillOpacity?: string | number;
+  className?: string;
 } & SvgDimensionType &
   SvgStrokeType;
 
@@ -33,10 +34,12 @@ export const SvgIcon = (props: SvgPropParams): JSX.Element => {
     additionalStrokeWidth,
     viewBox,
     children,
+    className,
   } = props;
 
   return (
     <svg
+      className={className}
       role={role ?? 'img'}
       width={width}
       height={height}

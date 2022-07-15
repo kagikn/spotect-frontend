@@ -1,4 +1,8 @@
 {
+  "bottom-menu": {
+    "home": "ホーム",
+    "search": "検索"
+  },
   "search": {
     "input-aria-label": "検索",
     "input-placeholder": "曲を検索",

@@ -126,7 +126,7 @@ const ResultView = (
   ));
 
   return (
-    <>
+    <div className="pb-[4.375rem]">
       <div className="relative flex flex-col gap-y-2 p-4 pt-[4.5rem]">
         <div
           className={`block h-full w-full absolute top-0 left-0 z-[-1] ${css`
@@ -146,13 +146,11 @@ const ResultView = (
             <path d="M15.957 2.793a1 1 0 010 1.414L8.164 12l7.793 7.793a1 1 0 11-1.414 1.414L5.336 12l9.207-9.207a1 1 0 011.414 0z" />
           </SvgIcon>
         </button>
-        <div className="w-[clamp(144px,40vw,288px)] h-[clamp(144px,40vw,288px)] self-center">
-          <img
-            src={trackImgUrl}
-            className="bg-gray-700 m-auto w-full h-full"
-            alt=""
-          />
-        </div>
+        <img
+          src={trackImgUrl}
+          className="bg-gray-700 m-auto w-[clamp(144px,40vw,288px)] h-[clamp(144px,40vw,288px)] self-center"
+          alt=""
+        />
         {songName ? (
           <h1 className="font-bold text-2xl">{songName}</h1>
         ) : (
@@ -168,7 +166,7 @@ const ResultView = (
         <p className="font-bold text-lg">Mood</p>
         {mappedAudioFeatureList}
       </div>
-    </>
+    </div>
   );
 };
 

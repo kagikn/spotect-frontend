@@ -8,7 +8,7 @@ const PageLoadingFailedView = (props: {
   const {onRetryButtonClick: onClickProp} = props;
 
   return (
-    <div className="flex flex-col leading-6 justify-center items-center h-full m-auto">
+    <div className="flex flex-col leading-6 justify-center items-center h-screen m-auto">
       <div className="text-center">
         <h1 className="font-bold text-5xl my-4 tracking-[-0.04em]">
           {t('page-loading-failed-view.big-message')}
