@@ -10,7 +10,9 @@ export const SearchView = (): JSX.Element => {
   const {
     data: {query},
   } = useMatch();
-  const [inputtedSearchTerm, setInputtedSearchTerm] = useState<string>(query);
+  const [inputtedSearchTerm, setInputtedSearchTerm] = useState<string>(
+    decodeURIComponent(query)
+  );
   const debouncedSearchTerm = useDebounce(inputtedSearchTerm, 400);
   const isFirstRender = useRef(true);
 
