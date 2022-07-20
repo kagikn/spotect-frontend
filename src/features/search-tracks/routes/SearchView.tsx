@@ -32,6 +32,7 @@ export const SearchView = (): JSX.Element => {
     setInputtedSearchTerm(e.target.value);
   }, []);
   const onClearCallback = useCallback(() => {
+    setInputtedSearchTerm('');
     navigate({
       to: '/search',
       replace: true,
